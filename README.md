@@ -44,6 +44,7 @@ Represents a vehicle entering the parking lot.
 | LicensePlate | Vehicle registration number |
 | Type         | Bike, Car, Truck            |
 | LastParked   | Last parking timestamp      |
+| IsParked     | Parking status              |
 
 ### ParkingSpot
 
@@ -52,9 +53,10 @@ Represents a parking slot.
 | Property   | Description            |
 | ---------- | ---------------------- |
 | Id         | Unique identifier      |
-| SpotNumber | Spot number            |
-| SpotType   | Bike, Car, Truck       |
 | IsOccupied | Occupancy status       |
+| LevelNumber| floor number           |
+| SpotType   | Bike, Car, Truck       |
+| Vehicle    | Vehicle on Spot        |
 | IsActive   | Active/Inactive status |
 
 ### Ticket
@@ -64,11 +66,14 @@ Represents a parking session.
 | Property    | Description           |
 | ----------- | --------------------- |
 | Id          | Unique identifier     |
+| Vehicle     | Associated vehicle    |
+| ParkingSpot | Assigned parking spot |
 | EntryTime   | Vehicle entry time    |
 | ExitTime    | Vehicle exit time     |
 | ParkingFee  | Calculated fee        |
-| Vehicle     | Associated vehicle    |
-| ParkingSpot | Assigned parking spot |
+| IsPaid      | Fee paid status       |
+| PaymentType | Payment method        |
+
 
 ---
 
@@ -79,7 +84,7 @@ Represents a parking session.
 Creates a parking spot at a specified level.
 
 ```http
-POST /api/parking/add-spot
+POST /api/admin/add-spot
 ```
 
 Request:
@@ -106,7 +111,7 @@ Response:
 Removes an existing parking spot.
 
 ```http
-DELETE /api/parking/remove-spot/{levelNumber}/{spotId}
+DELETE /api/admin/remove-spot/{levelNumber}/{spotId}
 ```
 
 Response:
@@ -130,7 +135,7 @@ GET /api/parking/available-spots/{vehicleType}
 Example:
 
 ```http
-GET /api/parking/available-spots/Car
+GET /api/admin/available-spots/Car
 ```
 
 Response:
@@ -152,7 +157,7 @@ Response:
 Assigns a vehicle to a parking spot and generates a ticket.
 
 ```http
-POST /api/parking/park
+POST /api/admin/park
 ```
 
 Request:
@@ -180,7 +185,7 @@ Response:
 Processes vehicle exit, calculates parking fee, updates ticket information, and releases the parking spot.
 
 ```http
-POST /api/parking/unpark/{ticketId}
+POST /api/admin/unpark/{ticketId}
 ```
 
 Request:
